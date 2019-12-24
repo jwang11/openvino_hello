@@ -12,7 +12,7 @@ Simple tutorial demo openvino usage
 
 ## Build and run hello classification
 ```$make
-$./classify models/public/alexnet/FP32/alexnet.xml cat.bmp CPU
+$./hello_classify models/public/alexnet/FP32/alexnet.xml cat.bmp CPU
 
 Top 10 results:
 

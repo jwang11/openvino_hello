@@ -11,35 +11,6 @@
 
 using namespace InferenceEngine;
 
-/**
- * @brief Wraps data stored inside of a passed cv::Mat object by new Blob pointer.
- * @note: No memory allocation is happened. The blob just points to already existing
- *        cv::Mat data.
- * @param mat - given cv::Mat object with an image data.
- * @return resulting Blob pointer.
- */
-static InferenceEngine::Blob::Ptr wrapMat2Blob(const cv::Mat &mat) {
-    size_t channels = mat.channels();
-    size_t height = mat.size().height;
-    size_t width = mat.size().width;
-
-    size_t strideH = mat.step.buf[0];
-    size_t strideW = mat.step.buf[1];
-
-    bool is_dense =
-            strideW == channels &&
-            strideH == channels * width;
-
-    if (!is_dense) THROW_IE_EXCEPTION
-                << "Doesn't support conversion from not dense cv::Mat";
-
-    InferenceEngine::TensorDesc tDesc(InferenceEngine::Precision::U8,
-                                      {1, channels, height, width},
-                                      InferenceEngine::Layout::NHWC);
-
-    return InferenceEngine::make_shared_blob<uint8_t>(tDesc, mat.data);
-}
-
 int main(int argc, char *argv[]) {
     // ------------------------------ Parsing and validation of input args ---------------------------------
     if (argc != 4) {
@@ -88,8 +59,16 @@ int main(int argc, char *argv[]) {
 
     // --------------------------- 6. Prepare input --------------------------------------------------------
     /* Read input image to a blob and set it to an infer request without resize and layout conversions. */
-    cv::Mat image = cv::imread(input_image_path);
-    Blob::Ptr imgBlob = wrapMat2Blob(image);  // just wrap Mat data by Blob::Ptr without allocating of new memory
+    cv::Mat mat = cv::imread(input_image_path);
+    size_t channels = mat.channels();
+    size_t height = mat.size().height;
+    size_t width = mat.size().width;
+
+    InferenceEngine::TensorDesc tDesc(InferenceEngine::Precision::U8,
+                                      {1, channels, height, width},
+                                      InferenceEngine::Layout::NHWC);
+
+    Blob::Ptr imgBlob = InferenceEngine::make_shared_blob<uint8_t>(tDesc, mat.data);
     infer_request.SetBlob(input_name, imgBlob);  // infer_request accepts input blob of any size
 
     // --------------------------- 7. Do inference --------------------------------------------------------

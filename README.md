@@ -1,5 +1,5 @@
 # openvino_hello
-Simple tutorial demo openvino usage
+A simple tutorial to demo openvino development https://software.intel.com/en-us/openvino-toolkit
 
 ## Download pre-trained model, e.g. alexnet
 ```$model-downloader --name alexnet -o models/```
@@ -8,9 +8,11 @@ Simple tutorial demo openvino usage
 ```$sudo pip3 install networkx==2.3```
 
 ## Convert pre-trained model to IR model
+This tool imports, converts, and optimizes models that were trained in popular frameworks to a format usable by Intel tools, especially the Inference Engine. Popular frameworks include Caffe*, TensorFlow*, MXNet*, and ONNX*.
 ```$model-converter --name alexnet -d models/ -o models/ --mo /usr/share/openvino/model-optimizer/mo.py```
 
-## Build and run hello classification
+## Build and run hello classification developed by Inference Engine 
+This is the engine that runs the deep learning model. It includes a set of libraries for an easy inference integration into your applications.
 ```$make
 $./hello_classify models/public/alexnet/FP32/alexnet.xml cat.bmp CPU
 

@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
     const file_name_t input_image_path{argv[2]};
     const std::string device_name{argv[3]};
 
-
     // --------------------------- 1. Load inference engine instance -------------------------------------
     Core ie;
 
@@ -48,7 +47,6 @@ int main(int argc, char *argv[]) {
     // --------------------------- Prepare output blobs ----------------------------------------------------
     DataPtr output_info = network.getOutputsInfo().begin()->second;
     std::string output_name = network.getOutputsInfo().begin()->first;
-
     output_info->setPrecision(Precision::FP32);
 
     // --------------------------- 4. Loading model to the device ------------------------------------------
@@ -81,7 +79,9 @@ int main(int argc, char *argv[]) {
     TopResults(10, *output, results);
 
     // Print classification results
-    std::cout << std::endl << "Top 10 results:" << std::endl << std::endl;
+    std::cout << "Top 10 results:" << std::endl << std::endl;
+    std::cout << "classid\t" << "probability" << std::endl;
+    std::cout << "----------------------" << std::endl;
     for (size_t id = 0; id < 10; ++id) {
         /** Getting probability for resulting class **/
         const auto result = output->buffer().

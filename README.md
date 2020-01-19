@@ -8,7 +8,7 @@ A simple tutorial to demo openvino development https://software.intel.com/en-us/
 ```$sudo pip3 install networkx==2.3```
 
 ## Convert pre-trained model to IR model
-This tool imports, converts, and optimizes models that were trained in popular frameworks to a format usable by Intel tools, especially the Inference Engine. Popular frameworks include Caffe*, TensorFlow*, MXNet*, and ONNX*.
+This tool imports, converts, and optimizes models that were trained in popular frameworks to a format usable by Intel tools, especially the Inference Engine. Popular frameworks include Caffe*, TensorFlow*, MXNet*, and ONNX*
 ```$model-converter --name alexnet -d models/ -o models/ --mo /usr/share/openvino/model-optimizer/mo.py```
 
 ## Build and run hello classification developed by Inference Engine 
@@ -32,4 +32,22 @@ classid probability
 272     0.0000055
 248     0.0000015
 514     0.0000012
+```
+for nv12 sample, 
+```$make
+$./hello_nv12 models/public/alexnet/FP32/alexnet.xml cat.yuv 600x400 CPU
+Top 10 results:
+
+classid probability
+----------------------
+281     0.593963
+285     0.374029
+282     0.027756
+287     0.004145
+292     0.000048
+286     0.000039
+280     0.000005
+272     0.000005
+248     0.000001
+514     0.000001
 ```
